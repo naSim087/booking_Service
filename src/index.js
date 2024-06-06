@@ -17,6 +17,6 @@ const setUpAndStartServer=async ()=>{
       db.sequelize.sync({alter:true});
     }
   
-  })
+  }) 
 }
 setUpAndStartServer()

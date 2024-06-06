@@ -1,6 +1,7 @@
 const { response } = require('express');
 const {BookingService }= require('../services/index')
-
+const {createChannel,publishMessage,subscribeMessage}=require('../utils/messageQueue')
+const {REMINDER_BINDING_KEY}= require('../config/server-config')
 const bookingService= new BookingService();
 const create=async (req, res)=>{
   try {
@@ -21,8 +22,15 @@ const create=async (req, res)=>{
     })
   }
 }
-
+ const sendMessageToQueue=async (req,res)=>{
+  const channel= await createChannel();
+  const data={message:"success"};
+  publishMessage(channel,REMINDER_BINDING_KEY,JSON.stringify(data));
+  return res.status(200).json({
+    message:"successfully send the message",
+  })
+ }
 
 module.exports={
-  create
+  create,sendMessageToQueue
 }
